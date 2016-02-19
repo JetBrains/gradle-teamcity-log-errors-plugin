@@ -13,14 +13,16 @@ task wrapper(type: Wrapper) {
     distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
 
-task log << {
-    TeamCity.processLogfile '1.log'
+task log(type: processLogfile) {
+    filename = '1.log'
 }
 
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
-class TeamCity {
+class processLogfile extends DefaultTask {
+    String filename
 
-    def static processLogfile(String filename) {
+    @TaskAction
+    def processLogfileAction() {
         def file = new File(filename)
         if (!file.exists()) {
             System.err.println "$filename doest not exist"
@@ -62,7 +64,7 @@ class TeamCity {
         printMessage(file.name, message)
     }
 
-    def static printMessage(file, message) {
+    def printMessage(file, message) {
         def text
         if (message.status == 'ERROR') {
             text = 'Error message'
