@@ -8,17 +8,15 @@ buildscript {
     }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '2.11'
-    distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
-}
-
-task log(type: processLogfile) {
-    filename = '1.log'
+apply plugin: LogprocessorPlugin
+class LogprocessorPlugin implements Plugin<Project> {
+    void apply(Project project) {
+        project.task('processLogfile', type: processLogfileTask)
+    }
 }
 
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
-class processLogfile extends DefaultTask {
+class processLogfileTask extends DefaultTask {
     String filename
 
     @TaskAction
@@ -83,4 +81,13 @@ class processLogfile extends DefaultTask {
         ]
         println new ServiceMessage('buildProblem', attrs).asString()
     }
+}
+
+processLogfile {
+    filename = '1.log'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
+    distributionUrl = "https://services.gradle.org/distributions/gradle-${gradleVersion}-all.zip"
 }
