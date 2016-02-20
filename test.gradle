@@ -1,0 +1,16 @@
+buildscript {
+    repositories {
+        maven { url uri("$buildDir/repo") }
+        maven { url 'http://repository.jetbrains.com/teamcity' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'jetbrains.buildServer.test.util:log-processor:+'
+    }
+}
+
+apply plugin: 'jetbrains.buildServer.test.util.log-processor'
+
+processLogfile {
+    filename = '1.log'
+}
