@@ -4,7 +4,7 @@ import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 
-class processLogfileTaskSpec extends Specification {
+class ProcessLogfileTaskSpec extends Specification {
     Project project
 
     def setup() {
