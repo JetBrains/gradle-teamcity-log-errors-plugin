@@ -5,10 +5,20 @@ import org.gradle.api.tasks.TaskAction
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
 class processLogfileTask extends DefaultTask {
-    String filename
+    List<String> files = new ArrayList<String>()
+
+    def file(String filename) {
+        files << filename
+    }
 
     @TaskAction
     def processLogfileAction() {
+        files.each { file->
+            processFile(file)
+        }
+    }
+
+    def processFile (String filename) {
         def file = new File(filename)
         if (!file.exists()) {
             System.err.println "$filename doest not exist"

@@ -12,5 +12,6 @@ buildscript {
 apply plugin: 'jetbrains.buildServer.test.util.log-processor'
 
 processLogfile {
-    filename = '1.log'
+    file '1.log'
+    file '2.log'
 }
