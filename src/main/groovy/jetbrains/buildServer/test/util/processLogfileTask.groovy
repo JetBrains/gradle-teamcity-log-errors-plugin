@@ -5,10 +5,14 @@ import org.gradle.api.tasks.TaskAction
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
 class processLogfileTask extends DefaultTask {
-    List<String> files = new ArrayList<String>()
+    List<File> files = new ArrayList<File>()
 
     def file(String filename) {
-        files << filename
+        files << new File(filename)
+    }
+
+    def file(File file) {
+        files << file
     }
 
     @TaskAction
@@ -18,10 +22,10 @@ class processLogfileTask extends DefaultTask {
         }
     }
 
-    def processFile (String filename) {
-        def file = new File(filename)
+//    private
+    def processFile (File file) {
         if (!file.exists()) {
-            System.err.println "$filename doest not exist"
+            System.err.println "File '$file.name' doest not exist"
             return
         }
 

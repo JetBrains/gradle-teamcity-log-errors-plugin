@@ -13,5 +13,6 @@ apply plugin: 'jetbrains.buildServer.test.util.log-processor'
 
 processLogfile {
     file '1.log'
-    file '2.log'
+    file new File('2.log')
+    file 'error'
 }
