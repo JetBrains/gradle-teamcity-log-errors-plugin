@@ -4,7 +4,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
-class processLogfileTask extends DefaultTask {
+class ProcessLogfileTask extends DefaultTask {
     List<File> files = new ArrayList<File>()
 
     def file(String filename) {
