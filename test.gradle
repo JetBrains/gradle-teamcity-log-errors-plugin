@@ -9,6 +9,8 @@ buildscript {
     }
 }
 
+defaultTasks 'processLogfile'
+
 apply plugin: 'jetbrains.buildServer.test.util.log-processor'
 
 processLogfile {

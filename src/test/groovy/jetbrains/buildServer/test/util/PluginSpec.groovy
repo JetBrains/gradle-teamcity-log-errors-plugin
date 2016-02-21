@@ -1,15 +1,17 @@
 package jetbrains.buildServer.test.util
 
 import spock.lang.Specification
-import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
+import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.BuildResult
 import static org.gradle.testkit.runner.TaskOutcome.*
 
 class PluginSpec extends Specification {
     List<File> pluginClasspath
     @Rule final TemporaryFolder testProjectDir = new TemporaryFolder()
     File buildFile
+    BuildResult result
 
     def setup() {
         def pluginClasspathResource = getClass().classLoader.findResource("plugin-classpath.txt")
@@ -19,51 +21,48 @@ class PluginSpec extends Specification {
         pluginClasspath = pluginClasspathResource.readLines().collect { new File(it) }
 
         buildFile = testProjectDir.newFile('build.gradle')
+        buildFile << """
+            plugins {
+                id 'jetbrains.buildServer.test.util.log-processor'
+            }
+        """
     }
 
     def "Report a service message"() {
         given:
         buildFile << """
-            plugins {
-                id 'jetbrains.buildServer.test.util.log-processor'
-            }
             processLogfile {
                 file '1.log'
             }
         """
 
         when:
-        def result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
-            .withArguments('processLogfile')
-            .withPluginClasspath(pluginClasspath)
-            .build()
+        build()
 
         then:
         result.output.contains("##teamcity[buildProblem description='Error message in 1.log (line 1): 111' identity='1508414']")
-        result.task(":processLogfile").outcome == SUCCESS
     }
 
     def "Show error message on missing file"() {
         given:
         buildFile << """
-            plugins {
-                id 'jetbrains.buildServer.test.util.log-processor'
-            }
             processLogfile {
                 file 'error.log'
             }
         """
 
         when:
-        def result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
-            .withArguments('processLogfile')
-            .withPluginClasspath(pluginClasspath)
-            .build()
+        build()
 
         then:
         result.output.contains("File 'error.log' does not exist")
-        result.task(":processLogfile").outcome == SUCCESS
+    }
+
+    void build() {
+        result = GradleRunner.create()
+                    .withProjectDir(testProjectDir.root)
+                    .withArguments('processLogfile')
+                    .withPluginClasspath(pluginClasspath)
+                    .build()
     }
 }

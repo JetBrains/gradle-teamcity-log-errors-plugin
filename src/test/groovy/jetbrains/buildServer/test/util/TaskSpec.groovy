@@ -3,26 +3,23 @@ package jetbrains.buildServer.test.util
 import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.gradle.api.Task
 
 class TaskSpec extends Specification {
     Project project
+    Task task
 
     def setup() {
         project = ProjectBuilder.builder().build()
+        task = project.task('checkLogs', type: ProcessLogfileTask)
     }
 
     def "Task type is available"() {
-        when:
-        def task = project.task('checkLogs', type: ProcessLogfileTask)
-
-        then:
+        expect:
         task instanceof ProcessLogfileTask
     }
 
     def "Task is configurable"() {
-        given:
-        def task = project.task('checkLogs', type: ProcessLogfileTask)
-
         when:
         task.configure {
             file '1.log'
@@ -33,9 +30,6 @@ class TaskSpec extends Specification {
     }
 
     def "Task accepts multiple parameters"() {
-        given:
-        def task = project.task('checkLogs', type: ProcessLogfileTask)
-
         when:
         task.configure {
             file '1.log'
@@ -47,9 +41,6 @@ class TaskSpec extends Specification {
     }
 
     def "Task accepts File objects"() {
-        given:
-        def task = project.task('checkLogs', type: ProcessLogfileTask)
-
         when:
         task.configure {
             file new File('1.log')
