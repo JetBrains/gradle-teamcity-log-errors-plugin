@@ -28,6 +28,14 @@ class PluginSpec extends Specification {
         """
     }
 
+    def "Run without configuration"() {
+        when:
+        build()
+
+        then:
+        result.task(":processLogfile").outcome == SUCCESS
+    }
+
     def "Report a service message"() {
         given:
         buildFile << """
