@@ -4,14 +4,14 @@ import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 
-class ProcessLogfileTaskSpec extends Specification {
+class TaskSpec extends Specification {
     Project project
 
     def setup() {
         project = ProjectBuilder.builder().build()
     }
 
-    def "Task type should be available in the project"() {
+    def "Task type is available"() {
         when:
         def task = project.task('checkLogs', type: ProcessLogfileTask)
 
@@ -19,7 +19,7 @@ class ProcessLogfileTaskSpec extends Specification {
         task instanceof ProcessLogfileTask
     }
 
-    def "Task should be configurable"() {
+    def "Task is configurable"() {
         given:
         def task = project.task('checkLogs', type: ProcessLogfileTask)
 
@@ -32,7 +32,7 @@ class ProcessLogfileTaskSpec extends Specification {
         task.files == [new File('1.log')]
     }
 
-    def "Task should accept multiple parameters"() {
+    def "Task accepts multiple parameters"() {
         given:
         def task = project.task('checkLogs', type: ProcessLogfileTask)
 
@@ -46,7 +46,7 @@ class ProcessLogfileTaskSpec extends Specification {
         task.files == [new File('1.log'), new File('2.log')]
     }
 
-    def "Task should accept File objects"() {
+    def "Task accepts File objects"() {
         given:
         def task = project.task('checkLogs', type: ProcessLogfileTask)
 

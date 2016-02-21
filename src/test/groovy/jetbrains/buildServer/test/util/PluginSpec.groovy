@@ -6,7 +6,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import static org.gradle.testkit.runner.TaskOutcome.*
 
-class ReportingRulesSpec extends Specification {
+class PluginSpec extends Specification {
     List<File> pluginClasspath
     @Rule final TemporaryFolder testProjectDir = new TemporaryFolder()
     File buildFile
@@ -21,7 +21,7 @@ class ReportingRulesSpec extends Specification {
         buildFile = testProjectDir.newFile('build.gradle')
     }
 
-    def "hello world task prints hello world"() {
+    def "Report a service message"() {
         given:
         buildFile << """
             plugins {
