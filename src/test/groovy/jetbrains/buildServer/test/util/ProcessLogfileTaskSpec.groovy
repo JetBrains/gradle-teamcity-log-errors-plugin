@@ -31,4 +31,18 @@ class ProcessLogfileTaskSpec extends Specification {
         then:
         task.files == [new File('1.log')]
     }
+
+    def "Task should accept multiple parameters"() {
+        given:
+        def task = project.task('checkLogs', type: ProcessLogfileTask)
+
+        when:
+        task.configure {
+            file '1.log'
+            file '2.log'
+        }
+
+        then:
+        task.files == [new File('1.log'), new File('2.log')]
+    }
 }
