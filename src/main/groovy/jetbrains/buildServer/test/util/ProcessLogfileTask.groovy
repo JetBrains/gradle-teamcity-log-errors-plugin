@@ -3,7 +3,7 @@ package jetbrains.buildServer.test.util
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 
-import static jetbrains.buildServer.test.util.findErrors.processFile
+import jetbrains.buildServer.test.util.LogFile
 
 class ProcessLogfileTask extends DefaultTask {
     List<File> files = []
@@ -19,7 +19,7 @@ class ProcessLogfileTask extends DefaultTask {
     @TaskAction
     def processLogfileAction() {
         files.each { file->
-            processFile(file)
+            new LogFile(file).parse().each { LogFile.printError it }
         }
     }
 }

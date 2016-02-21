@@ -2,14 +2,33 @@ package jetbrains.buildServer.test.util
 
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
-class findErrors {
-    static def processFile(File file) {
+class Message {
+    String filename
+    String lineNumber
+    String status
+    String text = ''
+    String stacktrace = ''
+
+    Message(filename) {
+        this.filename = filename
+    }
+}
+
+class LogFile {
+    File file
+    List<Message> errors = []
+
+    LogFile(File file){
+        this.file = file
+    }
+
+    List<Message> parse() {
         if (!file.exists()) {
             System.err.println "File '$file.name' does not exist"
             return
         }
 
-        def message = [:]
+        Message message = new Message(file.name)
 
         file.eachLine { line, number ->
             def matcher = line =~ /^\[(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2},\d{3})\]\s+(\S+?) -\s+?(\S+?) - (.*?)\s?$/
@@ -30,30 +49,34 @@ class findErrors {
                 return
             }
 
-            // a line is a new log message. print previously saved message
-            printMessage(file.name, message)
+            // a line is a new log message. save previously collected message
+            save(message)
 
-            // save the new message. it may be continued by multi-line message or a stacktrace in following lines
-            message = [
-                lineNumber: number,
-                status    : matcher[0][3],
-                text      : matcher[0][5],
-                stacktrace: '',
-            ]
+            // Start a new message. In following lines it may be continued by multi-line text or a stacktrace
+            message = new Message(file.name)
+            message.lineNumber = number
+            message.status = matcher[0][3]
+            message.text = matcher[0][5]
         }
-        printMessage(file.name, message)
+        save(message)
+        return errors
     }
 
-    private static def printMessage(file, message) {
+    private void save(Message message) {
+        if (message.status == 'ERROR' || message.stacktrace)
+            errors << message
+    }
+
+    static void printError(Message message) {
         def text
         if (message.status == 'ERROR') {
             text = 'Error message'
         } else if (message.stacktrace) {
             text = 'Stacktrace without ERROR message'
         } else {
-            return
+            throw new Exception('Not an error message')
         }
-        text += " in $file (line $message.lineNumber): $message.text"
+        text += " in $message.filename (line $message.lineNumber): $message.text"
         if (message.stacktrace) {
             text += "\n$message.stacktrace"
         }
@@ -63,5 +86,4 @@ class findErrors {
         ]
         println new ServiceMessage('buildProblem', attrs).asString()
     }
-
 }
