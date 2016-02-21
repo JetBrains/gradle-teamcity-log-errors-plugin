@@ -25,7 +25,7 @@ class ProcessLogfileTask extends DefaultTask {
 //    private
     def processFile (File file) {
         if (!file.exists()) {
-            System.err.println "File '$file.name' doest not exist"
+            System.err.println "File '$file.name' does not exist"
             return
         }
 
