@@ -45,4 +45,17 @@ class ProcessLogfileTaskSpec extends Specification {
         then:
         task.files == [new File('1.log'), new File('2.log')]
     }
+
+    def "Task should accept File objects"() {
+        given:
+        def task = project.task('checkLogs', type: ProcessLogfileTask)
+
+        when:
+        task.configure {
+            file new File('1.log')
+        }
+
+        then:
+        task.files == [new File('1.log')]
+    }
 }
