@@ -3,11 +3,11 @@ package jetbrains.buildServer.test.util
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
 class Message {
-    String filename
-    String lineNumber
-    String status
-    String text = ''
-    String stacktrace = ''
+    String  filename
+    Integer lineNumber
+    String  status
+    String  text = ''
+    String  stacktrace = ''
 
     Message(filename) {
         this.filename = filename
