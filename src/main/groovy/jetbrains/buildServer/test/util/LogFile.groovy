@@ -12,6 +12,10 @@ class Message {
     Message(filename) {
         this.filename = filename
     }
+
+    String toString() {
+        return this.properties
+    }
 }
 
 class LogFile {

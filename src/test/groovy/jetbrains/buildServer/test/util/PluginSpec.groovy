@@ -29,7 +29,10 @@ class PluginSpec extends Specification {
         build()
 
         then:
-        result.task(":processLogfile").outcome == SUCCESS
+        with(result) {
+            tasks.path.contains(':processLogfile')
+            task(':processLogfile').outcome == SUCCESS
+        }
     }
 
     def "Report a service message"() {
@@ -40,7 +43,9 @@ class PluginSpec extends Specification {
         build()
 
         then:
-        result.output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): error message' identity='-2066360288']")
+        with(result) {
+            output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): error message' identity='-2066360288']")
+        }
     }
 
     def "Show error on missing file"() {
@@ -51,7 +56,9 @@ class PluginSpec extends Specification {
         build()
 
         then:
-        result.output.contains("File 'missing.log' does not exist")
+        with(result) {
+            output.contains("File 'missing.log' does not exist")
+        }
     }
 
     def "Different stacktraces produce different service message hashsums"() {
@@ -62,8 +69,10 @@ class PluginSpec extends Specification {
         build()
 
         then:
-        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 1): the same message|nJspException: java|n\t123' identity='545184986']"
-        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 4): the same message|nJspException: java|n\t456' identity='545187965']"
+        with(result) {
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 1): the same message|nJspException: java|n\t123' identity='545184986']"
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 4): the same message|nJspException: java|n\t456' identity='545187965']"
+        }
     }
 
     def "Different error texts produce different service message hashsums"() {
@@ -74,8 +83,10 @@ class PluginSpec extends Specification {
         build()
 
         then:
-        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 1): different messages|n123|nJspException: java|n\tthe same stacktrace' identity='350940111']"
-        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 5): different messages|n456|nJspException: java|n\tthe same stacktrace' identity='-2134943630']"
+        with(result) {
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 1): different messages|n123|nJspException: java|n\tthe same stacktrace' identity='350940111']"
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 5): different messages|n456|nJspException: java|n\tthe same stacktrace' identity='-2134943630']"
+        }
     }
 
     void build() {

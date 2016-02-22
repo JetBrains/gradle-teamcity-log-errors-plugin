@@ -26,7 +26,9 @@ class TaskSpec extends Specification {
         }
 
         then:
-        task.files == [new File('1.log')]
+        with(task) {
+            files == [new File('1.log')]
+        }
     }
 
     def "Task accepts multiple parameters"() {
@@ -37,7 +39,9 @@ class TaskSpec extends Specification {
         }
 
         then:
-        task.files == [new File('1.log'), new File('2.log')]
+        with(task) {
+            files == [new File('1.log'), new File('2.log')]
+        }
     }
 
     def "Task accepts File objects"() {
@@ -47,6 +51,8 @@ class TaskSpec extends Specification {
         }
 
         then:
-        task.files == [new File('1.log')]
+        with(task) {
+            files == [new File('1.log')]
+        }
     }
 }

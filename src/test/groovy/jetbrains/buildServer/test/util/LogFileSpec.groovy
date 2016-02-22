@@ -11,10 +11,10 @@ class LogFileSpec extends Specification {
     @Unroll
     def "No errors in #filename"(String filename) {
         when:
-        parse filename
+        parse(filename)
 
         then:
-        errors == []
+        errors.size() == 0
 
         where:
         filename                | _
@@ -30,11 +30,13 @@ class LogFileSpec extends Specification {
 
         then:
         errors.size() == 1
-        errors[0].filename == filename
-        errors[0].lineNumber == lineNumber
-        errors[0].status == status
-        errors[0].text == text
-        errors[0].stacktrace == stacktrace
+        with(errors[0]) { message->
+            message.filename == filename
+            message.lineNumber == lineNumber
+            message.status == status
+            message.text == text
+            message.stacktrace == stacktrace
+        }
 
         where:
         filename                      | lineNumber | status  | text                      | stacktrace
