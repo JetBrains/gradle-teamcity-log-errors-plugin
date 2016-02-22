@@ -17,14 +17,15 @@ class LogFileSpec extends Specification {
         errors.size() == 0
 
         where:
-        filename                | _
-        'no errors.log'         | _
-        'multiline message.log' | _
-        'empty line.log'        | _
+        filename                                | _
+        'no errors.log'                         | _
+        'multiline message.log'                 | _
+        'unformatted message in first line.log' | _
+        'empty line.log'                        | _
     }
 
     @Unroll
-    def "Error message in #filename"(String filename, int lineNumber, String status, String text, String stacktrace) {
+    def "Error message in #filename"(String filename, Integer lineNumber, String status, String text, String stacktrace) {
         when:
         parse(filename)
 
@@ -45,7 +46,7 @@ class LogFileSpec extends Specification {
         'multiline error.log'         | 2          | 'ERROR' | 'first line\nsecond line' | ''
         'exception.log'               | 1          | 'ERROR' | 'error'                   | 'JspException: java\n\tat org'
         'exception without error.log' | 1          | 'INFO'  | 'message'                 | 'JspException: java\n\tat org'
-        'exception in first line.log' | 0          | null    | ''                        | 'JspException: java\n\tat org'
+        'exception in first line.log' | null       | null    | '\nUsing CATALINA_BASE'   | 'JspException: java\n\tat org'
     }
 
     void parse(String filename) {
