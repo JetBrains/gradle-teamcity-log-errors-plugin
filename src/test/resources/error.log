@@ -1,2 +1,2 @@
-[2016-01-16 19:53:13,927]  ERROR -  jetbrains.buildServer.STARTUP - 111
-[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - 1 message
+[2016-01-16 19:53:13,927]  ERROR -  jetbrains.buildServer.STARTUP - error message
+[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - info message

@@ -1,4 +1,2 @@
-[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - 1 message
-[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - 1 message
-[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - 1 message
-[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - 1 message
+[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - message 1
+[2016-01-16 19:53:13,927]   WARN -  jetbrains.buildServer.STARTUP - message 2

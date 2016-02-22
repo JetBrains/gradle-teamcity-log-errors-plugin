@@ -1,2 +1,2 @@
-[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - error in last line
-[2016-01-16 19:53:13,927]  ERROR -  jetbrains.buildServer.STARTUP - 222
+[2016-01-16 19:53:13,927]   INFO -  jetbrains.buildServer.STARTUP - info message
+[2016-01-16 19:53:13,927]  ERROR -  jetbrains.buildServer.STARTUP - last line

@@ -1,0 +1,4 @@
+[2016-01-25 03:14:28,002]   INFO -  jetbrains.buildServer.STARTUP - Current stage: Unsupported Java version (administrator login is required to proceed)
+[2016-01-25 03:14:28,001]   INFO -  jetbrains.buildServer.STARTUP - TeamCity server doesn't support Java with versions less than 1.8.
+Please upgrade Java and run TeamCity server again.
+Current Java version: 1.6.0_45

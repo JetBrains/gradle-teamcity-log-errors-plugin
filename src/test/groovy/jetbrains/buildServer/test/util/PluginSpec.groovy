@@ -40,10 +40,10 @@ class PluginSpec extends Specification {
         build()
 
         then:
-        result.output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): 111' identity='1508414']")
+        result.output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): error message' identity='-2066360288']")
     }
 
-    def "Show error message on missing file"() {
+    def "Show error on missing file"() {
         given:
         buildFile << "processLogfile { file 'src/test/resources/missing.log' }"
 

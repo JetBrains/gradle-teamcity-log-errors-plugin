@@ -8,16 +8,23 @@ import jetbrains.buildServer.test.util.LogFile
 class LogFileSpec extends Specification {
     List<Message> errors
 
-    def "No errors"() {
+    @Unroll
+    def "No errors in #filename"(String filename) {
         when:
-        parse 'no errors.log'
+        parse filename
 
         then:
         errors == []
+
+        where:
+        filename                | _
+        'no errors.log'         | _
+        'multiline message.log' | _
+        'empty line.log'        | _
     }
 
     @Unroll
-    def "Error messages in #filename"(String filename, int lineNumber, String status, String text, String stacktrace) {
+    def "Error message in #filename"(String filename, int lineNumber, String status, String text, String stacktrace) {
         when:
         parse(filename)
 
@@ -30,9 +37,13 @@ class LogFileSpec extends Specification {
         errors[0].stacktrace == stacktrace
 
         where:
-        filename                 | lineNumber | status  | text  | stacktrace
-        'error.log'              | 1          | 'ERROR' | '111' | ''
-        'error in last line.log' | 2          | 'ERROR' | '222' | ''
+        filename                      | lineNumber | status  | text                      | stacktrace
+        'error.log'                   | 1          | 'ERROR' | 'error message'           | ''
+        'error in last line.log'      | 2          | 'ERROR' | 'last line'               | ''
+        'multiline error.log'         | 2          | 'ERROR' | 'first line\nsecond line' | ''
+        'exception.log'               | 1          | 'ERROR' | 'error'                   | 'JspException: java\n\tat org'
+        'exception without error.log' | 1          | 'INFO'  | 'message'                 | 'JspException: java\n\tat org'
+        'exception in first line.log' | 0          | null    | ''                        | 'JspException: java\n\tat org'
     }
 
     void parse(String filename) {
