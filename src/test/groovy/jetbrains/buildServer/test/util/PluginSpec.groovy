@@ -21,11 +21,7 @@ class PluginSpec extends Specification {
         pluginClasspath = pluginClasspathResource.readLines().collect { new File(it) }
 
         buildFile = testProjectDir.newFile('build.gradle')
-        buildFile << """
-            plugins {
-                id 'jetbrains.buildServer.test.util.log-processor'
-            }
-        """
+        buildFile << "plugins { id 'jetbrains.buildServer.test.util.log-processor' }\n"
     }
 
     def "Run without configuration"() {
@@ -38,32 +34,24 @@ class PluginSpec extends Specification {
 
     def "Report a service message"() {
         given:
-        buildFile << """
-            processLogfile {
-                file '1.log'
-            }
-        """
+        buildFile << "processLogfile { file 'src/test/resources/error.log'}"
 
         when:
         build()
 
         then:
-        result.output.contains("##teamcity[buildProblem description='Error message in 1.log (line 1): 111' identity='1508414']")
+        result.output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): 111' identity='1508414']")
     }
 
     def "Show error message on missing file"() {
         given:
-        buildFile << """
-            processLogfile {
-                file 'error.log'
-            }
-        """
+        buildFile << "processLogfile { file 'src/test/resources/missing.log' }"
 
         when:
         build()
 
         then:
-        result.output.contains("File 'error.log' does not exist")
+        result.output.contains("File 'missing.log' does not exist")
     }
 
     void build() {

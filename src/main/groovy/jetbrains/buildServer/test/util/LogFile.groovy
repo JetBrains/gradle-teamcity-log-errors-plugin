@@ -4,7 +4,7 @@ import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
 class Message {
     String  filename
-    Integer lineNumber
+    int     lineNumber
     String  status
     String  text = ''
     String  stacktrace = ''
