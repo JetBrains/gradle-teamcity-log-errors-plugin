@@ -1,0 +1,8 @@
+[2016-01-16 19:53:13,927]  ERROR -  jetbrains.buildServer.STARTUP - different messages
+123
+JspException: java
+	the same stacktrace
+[2016-01-16 19:53:13,927]  ERROR -  jetbrains.buildServer.STARTUP - different messages
+456
+JspException: java
+	the same stacktrace

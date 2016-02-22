@@ -54,6 +54,30 @@ class PluginSpec extends Specification {
         result.output.contains("File 'missing.log' does not exist")
     }
 
+    def "Different stacktraces produce different service message hashsums"() {
+        given:
+        buildFile << "processLogfile { file 'src/test/resources/different checksums 1.log' }"
+
+        when:
+        build()
+
+        then:
+        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 1): the same message|nJspException: java|n\t123' identity='545184986']"
+        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 4): the same message|nJspException: java|n\t456' identity='545187965']"
+    }
+
+    def "Different error texts produce different service message hashsums"() {
+        given:
+        buildFile << "processLogfile { file 'src/test/resources/different checksums 2.log' }"
+
+        when:
+        build()
+
+        then:
+        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 1): different messages|n123|nJspException: java|n\tthe same stacktrace' identity='350940111']"
+        result.output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 5): different messages|n456|nJspException: java|n\tthe same stacktrace' identity='-2134943630']"
+    }
+
     void build() {
         result = GradleRunner.create()
                     .withProjectDir(testProjectDir.root)
