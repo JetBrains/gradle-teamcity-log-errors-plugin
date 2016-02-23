@@ -44,6 +44,40 @@ class PluginSpec extends Specification {
         }
     }
 
+    def "Show error if pattern lacks level"() {
+        given:
+        buildFile << $/
+            processLogfile {
+                pattern = /(?<message>.*)/
+            }
+        /$
+
+        when:
+        buildAndFail()
+
+        then:
+        with(result) {
+            output.contains("Pattern must contain 'level' group.")
+        }
+    }
+
+    def "Show error if pattern lacks message"() {
+        given:
+        buildFile << $/
+            processLogfile {
+                pattern = /(?<level>.*)/
+            }
+        /$
+
+        when:
+        buildAndFail()
+
+        then:
+        with(result) {
+            output.contains("Pattern must contain 'message' group.")
+        }
+    }
+
     def "Show error on missing file"() {
         given:
         buildFile << $/

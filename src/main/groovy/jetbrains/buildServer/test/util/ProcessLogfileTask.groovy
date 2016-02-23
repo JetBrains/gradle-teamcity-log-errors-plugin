@@ -19,9 +19,13 @@ class ProcessLogfileTask extends DefaultTask {
 
     @TaskAction
     def processLogfileAction() {
-        if(pattern == null){
+        if(pattern == null)
             throw new TaskExecutionException(this, new Exception("'pattern' must be specified."))
-        }
+        if(!pattern.contains('(?<level>'))
+            throw new TaskExecutionException(this, new Exception("Pattern must contain 'level' group."))
+        if(!pattern.contains('(?<message>'))
+            throw new TaskExecutionException(this, new Exception("Pattern must contain 'message' group."))
+
         files.each { file->
             new LogFile(file, pattern).parse().each { LogFile.printError it }
         }
