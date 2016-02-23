@@ -6,6 +6,7 @@ import spock.lang.Unroll
 import jetbrains.buildServer.test.util.LogFile
 
 class LogFileSpec extends Specification {
+    String pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
     List<Message> errors
 
     @Unroll
@@ -41,15 +42,26 @@ class LogFileSpec extends Specification {
 
         where:
         filename                      | lineNumber | status  | text                      | stacktrace
-        'error.log'                   | 1          | 'ERROR' | 'error message'           | ''
-        'error in last line.log'      | 2          | 'ERROR' | 'last line'               | ''
-        'multiline error.log'         | 2          | 'ERROR' | 'first line\nsecond line' | ''
-        'exception.log'               | 1          | 'ERROR' | 'error'                   | 'JspException: java\n\tat org'
-        'exception without error.log' | 1          | 'INFO'  | 'message'                 | 'JspException: java\n\tat org'
+        'error.log'                   | 1          | 'error' | 'error message'           | ''
+        'error in last line.log'      | 2          | 'error' | 'last line'               | ''
+        'multiline error.log'         | 2          | 'error' | 'first line\nsecond line' | ''
+        'exception.log'               | 1          | 'error' | 'error'                   | 'JspException: java\n\tat org'
+        'exception without error.log' | 1          | 'info'  | 'message'                 | 'JspException: java\n\tat org'
         'exception in first line.log' | null       | null    | '\nUsing CATALINA_BASE'   | 'JspException: java\n\tat org'
     }
 
+    def "Error message with alternate pattern"() {
+        given:
+        pattern = /.{19} \[(?<level>.+?)\] \S+ \S+ (?<message>.*)/
+
+        when:
+        parse('nginx.log')
+
+        then:
+        errors.size() == 1
+    }
+
     void parse(String filename) {
-        errors = new LogFile(new File("src/test/resources/$filename")).parse()
+        errors = new LogFile(new File("src/test/resources/$filename"), pattern).parse()
     }
 }

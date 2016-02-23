@@ -20,10 +20,13 @@ class Message {
 
 class LogFile {
     File file
+    String pattern
     List<Message> errors = []
 
-    LogFile(File file){
+    LogFile(File file, String pattern){
         this.file = file
+        //TODO: Check if the pattern contains 'level' and 'message' groups
+        this.pattern = pattern
     }
 
     List<Message> parse() {
@@ -35,9 +38,8 @@ class LogFile {
         Message message = new Message(file.name)
 
         file.eachLine { line, number ->
-            def matcher = line =~ /^\[(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2},\d{3})\]\s+(\S+?) -\s+?(\S+?) - (.*?)\s?$/
-
-            if (matcher.count == 0) {
+            def matcher = line =~ pattern
+            if (matcher.matches() == false) {
                 if (message.stacktrace == '') {
                     if (line ==~ /\S+Exception: .+/) {
                         // the line is a beginning of a stacktrace
@@ -59,21 +61,21 @@ class LogFile {
             // Start a new message. In following lines it may be continued by multi-line text or a stacktrace
             message = new Message(file.name)
             message.lineNumber = number
-            message.status = matcher[0][3]
-            message.text = matcher[0][5]
+            message.status = matcher.group('level').toLowerCase()
+            message.text = matcher.group('message')
         }
         save(message)
         return errors
     }
 
     private void save(Message message) {
-        if (message.status == 'ERROR' || message.stacktrace)
+        if (message.status == 'error' || message.stacktrace)
             errors << message
     }
 
     static void printError(Message message) {
         def text
-        if (message.status == 'ERROR') {
+        if (message.status == 'error') {
             text = 'Error message'
         } else if (message.stacktrace) {
             text = 'Stacktrace without ERROR message'

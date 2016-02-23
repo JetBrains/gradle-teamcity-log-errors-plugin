@@ -26,31 +26,32 @@ class PluginSpec extends Specification {
 
     def "Run without configuration"() {
         when:
-        build()
+        build('tasks')
 
         then:
         with(result) {
-            tasks.path.contains(':processLogfile')
-            task(':processLogfile').outcome == SUCCESS
+            task(':tasks').outcome == SUCCESS
         }
     }
 
-    def "Report a service message"() {
-        given:
-        buildFile << "processLogfile { file 'src/test/resources/error.log'}"
-
+    def "Show error on missing pattern"() {
         when:
-        build()
+        buildAndFail()
 
         then:
         with(result) {
-            output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): error message' identity='-2066360288']")
+            output.contains("'pattern' must be specified.")
         }
     }
 
     def "Show error on missing file"() {
         given:
-        buildFile << "processLogfile { file 'src/test/resources/missing.log' }"
+        buildFile << $/
+            processLogfile {
+                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                file 'src/test/resources/missing.log'
+            }
+        /$
 
         when:
         build()
@@ -61,9 +62,32 @@ class PluginSpec extends Specification {
         }
     }
 
+    def "Report a service message"() {
+        given:
+        buildFile << $/
+            processLogfile {
+                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                file 'src/test/resources/error.log'
+            }
+        /$
+
+        when:
+        build()
+
+        then:
+        with(result) {
+            output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): error message' identity='-2066360288']")
+        }
+    }
+
     def "Different stacktraces produce different service message hashsums"() {
         given:
-        buildFile << "processLogfile { file 'src/test/resources/different checksums 1.log' }"
+        buildFile << $/
+            processLogfile {
+                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                file 'src/test/resources/different checksums 1.log'
+            }
+        /$
 
         when:
         build()
@@ -77,7 +101,12 @@ class PluginSpec extends Specification {
 
     def "Different error texts produce different service message hashsums"() {
         given:
-        buildFile << "processLogfile { file 'src/test/resources/different checksums 2.log' }"
+        buildFile << $/
+            processLogfile {
+                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                file 'src/test/resources/different checksums 2.log'
+            }
+        /$
 
         when:
         build()
@@ -89,11 +118,19 @@ class PluginSpec extends Specification {
         }
     }
 
-    void build() {
+    void build(String task = 'processLogfile') {
         result = GradleRunner.create()
                     .withProjectDir(testProjectDir.root)
-                    .withArguments('processLogfile')
+                    .withArguments(task)
                     .withPluginClasspath(pluginClasspath)
                     .build()
+    }
+
+    void buildAndFail(String task = 'processLogfile') {
+        result = GradleRunner.create()
+                    .withProjectDir(testProjectDir.root)
+                    .withArguments(task)
+                    .withPluginClasspath(pluginClasspath)
+                    .buildAndFail()
     }
 }
