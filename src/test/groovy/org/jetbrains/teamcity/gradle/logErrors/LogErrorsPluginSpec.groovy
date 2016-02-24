@@ -1,4 +1,4 @@
-package jetbrains.buildServer.test.util
+package org.jetbrains.teamcity.gradle.logErrors
 
 import spock.lang.Specification
 import org.junit.Rule
@@ -7,7 +7,7 @@ import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.BuildResult
 import static org.gradle.testkit.runner.TaskOutcome.*
 
-class PluginSpec extends Specification {
+class LogErrorsPluginSpec extends Specification {
     List<File> pluginClasspath
     @Rule final TemporaryFolder testProjectDir = new TemporaryFolder()
     File buildFile
@@ -21,7 +21,7 @@ class PluginSpec extends Specification {
         pluginClasspath = pluginClasspathResource.readLines().collect { new File(it) }
 
         buildFile = testProjectDir.newFile('build.gradle')
-        buildFile << "plugins { id 'jetbrains.buildServer.test.util.log-processor' }\n"
+        buildFile << "plugins { id 'org.jetbrains.teamcity.log-errors' }\n"
     }
 
     def "Run without configuration"() {
@@ -47,7 +47,7 @@ class PluginSpec extends Specification {
     def "Show error if pattern lacks level"() {
         given:
         buildFile << $/
-            processLogfile {
+            reportLogErrors {
                 pattern = /(?<message>.*)/
             }
         /$
@@ -64,7 +64,7 @@ class PluginSpec extends Specification {
     def "Show error if pattern lacks message"() {
         given:
         buildFile << $/
-            processLogfile {
+            reportLogErrors {
                 pattern = /(?<level>.*)/
             }
         /$
@@ -81,7 +81,7 @@ class PluginSpec extends Specification {
     def "Show error on missing file"() {
         given:
         buildFile << $/
-            processLogfile {
+            reportLogErrors {
                 pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
                 file 'src/test/resources/missing.log'
             }
@@ -99,7 +99,7 @@ class PluginSpec extends Specification {
     def "Report a service message"() {
         given:
         buildFile << $/
-            processLogfile {
+            reportLogErrors {
                 pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
                 file 'src/test/resources/error.log'
             }
@@ -117,7 +117,7 @@ class PluginSpec extends Specification {
     def "Different stacktraces produce different service message hashsums"() {
         given:
         buildFile << $/
-            processLogfile {
+            reportLogErrors {
                 pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
                 file 'src/test/resources/different checksums 1.log'
             }
@@ -136,7 +136,7 @@ class PluginSpec extends Specification {
     def "Different error texts produce different service message hashsums"() {
         given:
         buildFile << $/
-            processLogfile {
+            reportLogErrors {
                 pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
                 file 'src/test/resources/different checksums 2.log'
             }
@@ -152,7 +152,7 @@ class PluginSpec extends Specification {
         }
     }
 
-    void build(String task = 'processLogfile') {
+    void build(String task = 'reportLogErrors') {
         result = GradleRunner.create()
                     .withProjectDir(testProjectDir.root)
                     .withArguments(task)
@@ -160,7 +160,7 @@ class PluginSpec extends Specification {
                     .build()
     }
 
-    void buildAndFail(String task = 'processLogfile') {
+    void buildAndFail(String task = 'reportLogErrors') {
         result = GradleRunner.create()
                     .withProjectDir(testProjectDir.root)
                     .withArguments(task)

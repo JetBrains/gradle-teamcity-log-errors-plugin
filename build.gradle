@@ -20,7 +20,7 @@ task createClasspathManifest {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'org.jetbrains.teamcity:common-api:9.1.5'
+    compile 'org.jetbrains.teamcity:common-api:9.1.6'
 
     testCompile gradleTestKit()
     testCompile ('org.spockframework:spock-core:1.0-groovy-2.4') {
@@ -43,8 +43,8 @@ publishing {
         maven(MavenPublication) {
             from components.java
 
-            groupId 'jetbrains.buildServer.test.util'
-            artifactId 'log-processor'
+            groupId 'org.jetbrains.teamcity.gradle'
+            artifactId 'log-errors'
             version '1.0-SNAPSHOT'
         }
     }

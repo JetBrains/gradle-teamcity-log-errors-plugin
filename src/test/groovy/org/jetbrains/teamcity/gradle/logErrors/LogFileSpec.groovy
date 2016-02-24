@@ -1,9 +1,7 @@
-package jetbrains.buildServer.test.util
+package org.jetbrains.teamcity.gradle.logErrors
 
 import spock.lang.Specification
 import spock.lang.Unroll
-
-import jetbrains.buildServer.test.util.LogFile
 
 class LogFileSpec extends Specification {
     String pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/

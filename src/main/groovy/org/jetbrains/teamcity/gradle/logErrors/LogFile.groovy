@@ -1,4 +1,4 @@
-package jetbrains.buildServer.test.util
+package org.jetbrains.teamcity.gradle.logErrors
 
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
@@ -39,7 +39,7 @@ class LogFile {
 
         file.eachLine { line, number ->
             def matcher = line =~ pattern
-            if (matcher.matches() == false) {
+            if (!matcher.matches()) {
                 if (message.stacktrace == '') {
                     if (line ==~ /\S+Exception: .+/) {
                         // the line is a beginning of a stacktrace

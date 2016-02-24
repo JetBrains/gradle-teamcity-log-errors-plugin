@@ -5,15 +5,15 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'jetbrains.buildServer.test.util:log-processor:+'
+        classpath 'org.jetbrains.teamcity.gradle:log-errors:+'
     }
 }
 
-defaultTasks 'processLogfile'
+defaultTasks 'reportLogErrors'
 
-apply plugin: 'jetbrains.buildServer.test.util.log-processor'
+apply plugin: 'org.jetbrains.teamcity.log-errors'
 
-processLogfile {
+reportLogErrors {
     pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
     file 'src/test/resources/error.log'
     file new File('src/test/resources/error in last line.log')

@@ -1,22 +1,21 @@
-package jetbrains.buildServer.test.util
+package org.jetbrains.teamcity.gradle.logErrors
 
 import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
-import org.gradle.api.Task
 
-class TaskSpec extends Specification {
+class ReportLogErrorsTaskSpec extends Specification {
     Project project
-    Task task
+    ReportLogErrorsTask task
 
     def setup() {
         project = ProjectBuilder.builder().build()
-        task = project.task('checkLogs', type: ProcessLogfileTask)
+        task = project.task('reportLogErrors', type: ReportLogErrorsTask)
     }
 
     def "Task type is available"() {
         expect:
-        task instanceof ProcessLogfileTask
+        task instanceof ReportLogErrorsTask
     }
 
     def "Task is configurable"() {
