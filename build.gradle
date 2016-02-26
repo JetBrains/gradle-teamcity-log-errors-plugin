@@ -36,7 +36,12 @@ apply plugin: 'maven-publish'
 publishing {
     repositories {
         maven {
-            url "$buildDir/repo"
+            url 'http://repository.jetbrains.com/teamcity'
+            credentials {
+                // saved in 'gradle.properties' file
+                username mavenUser
+                password mavenPassword
+            }
         }
     }
     publications {
@@ -45,7 +50,7 @@ publishing {
 
             groupId 'org.jetbrains.teamcity.gradle'
             artifactId 'log-errors'
-            version '1.0-SNAPSHOT'
+            version '1.0'
         }
     }
 }
