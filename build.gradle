@@ -40,11 +40,19 @@ apply plugin: 'maven-publish'
 publishing {
     repositories {
         maven {
-            url 'http://repository.jetbrains.com/teamcity'
-            credentials {
-                // saved in 'gradle.properties' file
-                username mavenUser
-                password mavenPassword
+            name 'dev'
+            url "$buildDir/repo"
+        }
+
+        // saved in 'gradle.properties' file
+        if (project.hasProperty('mavenUser') && project.hasProperty('mavenPassword')) {
+            maven {
+                name 'release'
+                url 'http://repository.jetbrains.com/teamcity'
+                credentials {
+                    username mavenUser
+                    password mavenPassword
+                }
             }
         }
     }
