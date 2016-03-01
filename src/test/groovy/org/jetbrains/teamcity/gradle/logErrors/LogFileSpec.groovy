@@ -5,7 +5,7 @@ import spock.lang.Unroll
 import java.util.regex.Pattern
 
 class LogFileSpec extends Specification {
-    String pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+    String pattern = /\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/
     List<Message> errors
 
     @Unroll
@@ -51,7 +51,7 @@ class LogFileSpec extends Specification {
 
     def "Error message with alternate pattern"() {
         given:
-        pattern = /.{19} \[(?<level>.+?)\] \S+ \S+ (?<message>.*)/
+        pattern = /.{19} \[(.+?)\] \S+ \S+ (.*)/
 
         when:
         parse('nginx.log')

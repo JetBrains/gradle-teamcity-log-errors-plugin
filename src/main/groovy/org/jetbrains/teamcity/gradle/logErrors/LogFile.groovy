@@ -26,7 +26,6 @@ class LogFile {
 
     LogFile(File file, Pattern pattern){
         this.file = file
-        //TODO: Check if the pattern contains 'level' and 'message' groups
         this.pattern = pattern
     }
 
@@ -62,8 +61,8 @@ class LogFile {
             // Start a new message. In following lines it may be continued by multi-line text or a stacktrace
             message = new Message(file.name)
             message.lineNumber = number
-            message.status = matcher.group('level').toLowerCase()
-            message.text = matcher.group('message')
+            message.status = matcher[0][1].toLowerCase()
+            message.text = matcher[0][2]
         }
         save(message)
         return errors

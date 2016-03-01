@@ -14,7 +14,7 @@ defaultTasks 'reportLogErrors'
 apply plugin: 'org.jetbrains.teamcity.log-errors'
 
 reportLogErrors {
-    pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+    pattern  (/\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/)
     file 'src/test/resources/error.log'
     file new File('src/test/resources/error in last line.log')
     file 'src/test/resources/missing.log'

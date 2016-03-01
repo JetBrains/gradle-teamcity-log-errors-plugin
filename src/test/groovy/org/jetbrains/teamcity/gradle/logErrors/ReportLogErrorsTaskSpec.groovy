@@ -23,12 +23,12 @@ class ReportLogErrorsTaskSpec extends Specification {
     def "Task accepts a pattern"() {
         when:
         task.configure {
-            pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
+            pattern (/\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/)
         }
 
         then:
         with(task) {
-            pattern.pattern() == /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+            pattern.pattern() == /\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/
         }
     }
 

@@ -48,7 +48,7 @@ class LogErrorsPluginSpec extends Specification {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
+                pattern (/\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/)
                 file 'src/test/resources/missing.log'
             }
         /$
@@ -66,7 +66,7 @@ class LogErrorsPluginSpec extends Specification {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
+                pattern (/\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/)
                 file 'src/test/resources/error.log'
             }
         /$
@@ -84,7 +84,7 @@ class LogErrorsPluginSpec extends Specification {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
+                pattern (/\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/)
                 file 'src/test/resources/different checksums 1.log'
             }
         /$
@@ -103,7 +103,7 @@ class LogErrorsPluginSpec extends Specification {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
+                pattern (/\[.{23}\] \s*(\S+) - \s*\S+ - (.*)\s?/)
                 file 'src/test/resources/different checksums 2.log'
             }
         /$
