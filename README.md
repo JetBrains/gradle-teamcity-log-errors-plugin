@@ -11,16 +11,18 @@ buildscript {
         maven { url 'http://repository.jetbrains.com/teamcity' }
     }
     dependencies {
-        classpath 'org.jetbrains.teamcity.gradle:log-errors:+'
+        classpath 'org.jetbrains.teamcity.gradle:log-errors:1.+'
     }
 }
 
 apply plugin: 'org.jetbrains.teamcity.log-errors'
 
-processLogfile {
-    pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)/
+reportLogErrors {
+    pattern (/\[.+?\] \s*(\S+) - \s*\S+ - (.*)/)
     file 'service1.log'
     file 'service2.log'
 }
 ```
-`pattern` [regex string](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html) is mandatory.
+
+- `pattern`: [regex string](https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html), must contain two saving groups for message level (INFO/WARN/ERROR) and text.
+- 'file': a filename to scan.
