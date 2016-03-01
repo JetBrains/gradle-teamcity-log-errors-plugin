@@ -76,7 +76,7 @@ class LogErrorsPluginSpec extends Specification {
 
         then:
         with(result) {
-            output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): error message' identity='-2066360288']")
+            output.contains("##teamcity[buildProblem description='Error message in error.log (line 1): error message' identity='-66656785']")
         }
     }
 
@@ -94,12 +94,12 @@ class LogErrorsPluginSpec extends Specification {
 
         then:
         with(result) {
-            output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 1): the same message|nJspException: java|n\t123' identity='545184986']"
-            output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 4): the same message|nJspException: java|n\t456' identity='545187965']"
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 1): the same message|nJspException: java|n\t123' identity='-478693789']"
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 1.log (line 4): the same message|nJspException: java|n\t456' identity='-478690810']"
         }
     }
 
-    def "Different error texts produce different service message hashsums"() {
+    def "Equal stacktraces produce the same service message hashsum"() {
         given:
         buildFile << $/
             reportLogErrors {
@@ -113,8 +113,8 @@ class LogErrorsPluginSpec extends Specification {
 
         then:
         with(result) {
-            output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 1): different messages|n123|nJspException: java|n\tthe same stacktrace' identity='350940111']"
-            output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 5): different messages|n456|nJspException: java|n\tthe same stacktrace' identity='-2134943630']"
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 1): different messages|n123|nJspException: java|n\tthe same stacktrace' identity='-379785159']"
+            output.contains "##teamcity[buildProblem description='Error message in different checksums 2.log (line 5): different messages|n456|nJspException: java|n\tthe same stacktrace' identity='-379785159']"
         }
     }
 

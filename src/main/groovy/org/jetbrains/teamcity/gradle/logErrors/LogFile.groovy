@@ -88,7 +88,7 @@ class LogFile {
         }
         def attrs = [
             description: text.toString(),
-            identity   : "$message.text\n$message.stacktrace".hashCode().toString()
+            identity   : (message.stacktrace ?: message.text).hashCode().toString()
         ]
         println new ServiceMessage('buildProblem', attrs).asString()
     }
