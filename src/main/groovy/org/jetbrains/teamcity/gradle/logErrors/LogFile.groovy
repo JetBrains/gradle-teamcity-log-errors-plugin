@@ -1,5 +1,6 @@
 package org.jetbrains.teamcity.gradle.logErrors
 
+import java.util.regex.Pattern
 import jetbrains.buildServer.messages.serviceMessages.ServiceMessage
 
 class Message {
@@ -20,10 +21,10 @@ class Message {
 
 class LogFile {
     File file
-    String pattern
+    Pattern pattern
     List<Message> errors = []
 
-    LogFile(File file, String pattern){
+    LogFile(File file, Pattern pattern){
         this.file = file
         //TODO: Check if the pattern contains 'level' and 'message' groups
         this.pattern = pattern
@@ -38,7 +39,7 @@ class LogFile {
         Message message = new Message(file.name)
 
         file.eachLine { line, number ->
-            def matcher = line =~ pattern
+            def matcher = pattern.matcher(line)
             if (!matcher.matches()) {
                 if (message.stacktrace == '') {
                     if (line ==~ /\S+Exception: .+/) {

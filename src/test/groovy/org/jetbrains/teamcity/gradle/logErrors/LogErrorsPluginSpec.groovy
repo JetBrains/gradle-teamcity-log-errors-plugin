@@ -44,45 +44,11 @@ class LogErrorsPluginSpec extends Specification {
         }
     }
 
-    def "Show error if pattern lacks level"() {
-        given:
-        buildFile << $/
-            reportLogErrors {
-                pattern = /(?<message>.*)/
-            }
-        /$
-
-        when:
-        buildAndFail()
-
-        then:
-        with(result) {
-            output.contains("Pattern must contain 'level' group.")
-        }
-    }
-
-    def "Show error if pattern lacks message"() {
-        given:
-        buildFile << $/
-            reportLogErrors {
-                pattern = /(?<level>.*)/
-            }
-        /$
-
-        when:
-        buildAndFail()
-
-        then:
-        with(result) {
-            output.contains("Pattern must contain 'message' group.")
-        }
-    }
-
     def "Show error on missing file"() {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
                 file 'src/test/resources/missing.log'
             }
         /$
@@ -100,7 +66,7 @@ class LogErrorsPluginSpec extends Specification {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
                 file 'src/test/resources/error.log'
             }
         /$
@@ -118,7 +84,7 @@ class LogErrorsPluginSpec extends Specification {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
                 file 'src/test/resources/different checksums 1.log'
             }
         /$
@@ -137,7 +103,7 @@ class LogErrorsPluginSpec extends Specification {
         given:
         buildFile << $/
             reportLogErrors {
-                pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+                pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
                 file 'src/test/resources/different checksums 2.log'
             }
         /$

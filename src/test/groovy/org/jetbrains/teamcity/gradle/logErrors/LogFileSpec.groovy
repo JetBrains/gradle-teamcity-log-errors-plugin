@@ -2,6 +2,7 @@ package org.jetbrains.teamcity.gradle.logErrors
 
 import spock.lang.Specification
 import spock.lang.Unroll
+import java.util.regex.Pattern
 
 class LogFileSpec extends Specification {
     String pattern = /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
@@ -60,6 +61,6 @@ class LogFileSpec extends Specification {
     }
 
     void parse(String filename) {
-        errors = new LogFile(new File("src/test/resources/$filename"), pattern).parse()
+        errors = new LogFile(new File("src/test/resources/$filename"), Pattern.compile(pattern)).parse()
     }
 }

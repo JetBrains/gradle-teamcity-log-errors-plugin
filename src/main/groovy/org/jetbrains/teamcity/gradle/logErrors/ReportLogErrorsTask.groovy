@@ -2,10 +2,23 @@ package org.jetbrains.teamcity.gradle.logErrors
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.*
+import java.util.regex.Pattern
+import java.util.regex.PatternSyntaxException
 
 class ReportLogErrorsTask extends DefaultTask {
-    String pattern
+    Pattern pattern
     List<File> files = []
+
+    def pattern(String pattern) {
+        if(pattern.count('(') != 2) {
+            throw new TaskValidationException("Pattern must contain two saving groups", [])
+        }
+        try {
+            this.pattern = Pattern.compile(pattern)
+        } catch (PatternSyntaxException e) {
+            throw new TaskValidationException("Pattern '$pattern' is incorrect", [])
+        }
+    }
 
     def file(String filename) {
         files << new File(filename)
@@ -19,10 +32,6 @@ class ReportLogErrorsTask extends DefaultTask {
     def processLogfileAction() {
         if(pattern == null)
             throw new TaskExecutionException(this, new Exception("'pattern' must be specified."))
-        if(!pattern.contains('(?<level>'))
-            throw new TaskExecutionException(this, new Exception("Pattern must contain 'level' group."))
-        if(!pattern.contains('(?<message>'))
-            throw new TaskExecutionException(this, new Exception("Pattern must contain 'message' group."))
 
         files.each { file->
             new LogFile(file, pattern).parse().each { message ->

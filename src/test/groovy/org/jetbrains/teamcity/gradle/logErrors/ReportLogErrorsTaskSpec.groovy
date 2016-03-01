@@ -3,6 +3,8 @@ package org.jetbrains.teamcity.gradle.logErrors
 import spock.lang.Specification
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
+import org.gradle.api.tasks.TaskValidationException
+import spock.lang.Unroll
 
 class ReportLogErrorsTaskSpec extends Specification {
     Project project
@@ -18,7 +20,49 @@ class ReportLogErrorsTaskSpec extends Specification {
         task instanceof ReportLogErrorsTask
     }
 
-    def "Task is configurable"() {
+    def "Task accepts a pattern"() {
+        when:
+        task.configure {
+            pattern (/\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/)
+        }
+
+        then:
+        with(task) {
+            pattern.pattern() == /\[.{23}\] \s*(?<level>\S+) - \s*\S+ - (?<message>.*)\s?/
+        }
+    }
+
+    def "Task fails on incorrect pattern"() {
+        when:
+        task.configure {
+            pattern (')()(')
+        }
+
+        then:
+        def e = thrown TaskValidationException
+        e.message == "Pattern ')()(' is incorrect"
+    }
+
+    @Unroll
+    def "Task fails without saving groups in pattern '#value'"(String value) {
+        when:
+        task.configure {
+            pattern (value)
+        }
+
+        then:
+        def e = thrown TaskValidationException
+        e.message == "Pattern must contain two saving groups"
+
+        where:
+        value << [
+            /.+/,
+            /(.+)/,
+            /(.+).+(.+).+(.+).+/
+        ]
+    }
+
+    def "Task accepts a file"() {
         when:
         task.configure {
             file '1.log'
@@ -30,7 +74,7 @@ class ReportLogErrorsTaskSpec extends Specification {
         }
     }
 
-    def "Task accepts multiple parameters"() {
+    def "Task accepts multiple files"() {
         when:
         task.configure {
             file '1.log'
