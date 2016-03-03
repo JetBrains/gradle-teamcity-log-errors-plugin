@@ -10,7 +10,9 @@ Even if all tests are *green*, the app still has *hidden issues*, which should b
 This plugin helps detecting such problems. It provides `reportLogErrors` task, which starts after the tests,
 scans log files for error messages or stacktraces, and report them to TeamCity as build problems.
 
-If any errors are found, the build is failed. **Build Results** page and e-mail notifications show a clear explanation what went wrong.
+If any errors are found, the build is failed. **Build Results** page and e-mail notifications show a clear explanation what went wrong:
+
+![Build problem](http://i.imgur.com/nTx0QrB.png)
 
 # Features
 
