@@ -1,22 +1,22 @@
 # Gradle TeamCity Log Errors Plugin
 
-If your web application includes a suite of acceptance tests, they start an instance of the app,
+If your web application includes a suite of acceptance tests, they start an instance of the app
 and perform external checks using Selenium WebDriver or REST API.
 
 But sometimes backend components of the tested application raise unhandled exceptions,
-which produce no errors in UI, and cannot be caught this way.
+which produce no errors in the UI, and cannot be caught this way.
 Even if all tests are *green*, the app still has *hidden issues*, which should be addressed.
 
-This plugin helps detecting such problems. It provides `reportLogErrors` task, which starts after the tests,
-scans log files for error messages or stacktraces, and report them to TeamCity as build problems.
+This plugin helps detecting such problems. It provides the `reportLogErrors` task, which starts after the tests,
+scans log files for error messages or stacktraces, and reports them to TeamCity as build problems.
 
-If any errors are found, the build is failed. **Build Results** page and e-mail notifications show a clear explanation what went wrong:
+If any errors are found, the build is marked as failed. The **Build Results** page and e-mail notifications show a clear explanation what went wrong:
 
 ![Build problem](http://i.imgur.com/nTx0QrB.png)
 
 # Features
 
-- **Stacktraces**: all Java stacktraces are reported, even from INFO or WARN messages.
+- **Stacktraces**: all Java stacktraces are reported, from INFO or WARN messages.
 - **Error history**: if the same error is reported in multiple builds, even with different timestamps,
   all occurrences are linked together: *assigned investigations* and *muted problems* are preserved.
 
