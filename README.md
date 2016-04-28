@@ -26,7 +26,7 @@ If any errors are found, the build is marked as failed. The **Build Results** pa
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'http://repository.jetbrains.com/teamcity' }
+        maven { url 'http://repository.jetbrains.com/all' }
     }
     dependencies {
         classpath 'org.jetbrains.teamcity.gradle:log-errors:1.+'
