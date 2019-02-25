@@ -2,7 +2,7 @@ apply plugin: 'groovy'
 
 repositories {
     mavenCentral()
-    maven { url 'http://repository.jetbrains.com/teamcity' }
+    maven { url 'https://download.jetbrains.com/teamcity-repository' }
 }
 
 task createClasspathManifest {
@@ -48,7 +48,7 @@ publishing {
         if (project.hasProperty('mavenUser') && project.hasProperty('mavenPassword')) {
             maven {
                 name 'release'
-                url 'http://repository.jetbrains.com/teamcity'
+                url 'http://download.jetbrains.com/teamcity-repository'
                 credentials {
                     username mavenUser
                     password mavenPassword
