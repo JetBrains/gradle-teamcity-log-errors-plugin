@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven { url uri("$buildDir/repo") }
-        maven { url 'http://repository.jetbrains.com/teamcity' }
+        maven { url 'https://download.jetbrains.com/teamcity-repository' }
         mavenCentral()
     }
     dependencies {
