@@ -1,4 +1,4 @@
-[![JetBrains team project](http://jb.gg/badges/team.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
+[![JetBrains team project](https://jb.gg/badges/team.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
 # Gradle TeamCity Log Errors Plugin
 
@@ -14,7 +14,7 @@ scans log files for error messages or stacktraces, and reports them to TeamCity 
 
 If any errors are found, the build is marked as failed. The **Build Results** page and e-mail notifications show a clear explanation what went wrong:
 
-![Build problem](http://i.imgur.com/nTx0QrB.png)
+![Build problem](https://i.imgur.com/nTx0QrB.png)
 
 # Features
 
